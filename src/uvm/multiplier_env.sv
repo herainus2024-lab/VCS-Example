@@ -1,25 +1,25 @@
-`ifndef ADDER_ENV_SV
-`define ADDER_ENV_SV
+`ifndef MULTIPLIER_ENV_SV
+`define MULTIPLIER_ENV_SV
 
 // ============================================================================
-// Adder Environment
+// Multiplier Environment
 // 顶层验证环境，包含所有验证组件
 // ============================================================================
-class adder_env extends uvm_env;
+class multiplier_env extends uvm_env;
   
-  `uvm_component_utils(adder_env)
+  `uvm_component_utils(multiplier_env)
   
   // 组件实例
-  adder_agent       agent;
-  adder_scoreboard  scoreboard;
-  adder_coverage    coverage;
+  multiplier_agent       agent;
+  multiplier_scoreboard  scoreboard;
+  multiplier_coverage    coverage;
   
   // 环境配置
   bit has_scoreboard = 1;
   bit has_coverage   = 1;
   
   // 构造函数
-  function new(string name = "adder_env", uvm_component parent = null);
+  function new(string name = "multiplier_env", uvm_component parent = null);
     super.new(name, parent);
   endfunction : new
   
@@ -32,16 +32,16 @@ class adder_env extends uvm_env;
     uvm_config_db#(bit)::get(this, "", "has_coverage", has_coverage);
     
     // 创建 agent
-    agent = adder_agent::type_id::create("agent", this);
+    agent = multiplier_agent::type_id::create("agent", this);
     
     // 根据配置创建 scoreboard
     if (has_scoreboard) begin
-      scoreboard = adder_scoreboard::type_id::create("scoreboard", this);
+      scoreboard = multiplier_scoreboard::type_id::create("scoreboard", this);
     end
     
     // 根据配置创建 coverage
     if (has_coverage) begin
-      coverage = adder_coverage::type_id::create("coverage", this);
+      coverage = multiplier_coverage::type_id::create("coverage", this);
     end
     
     `uvm_info(get_type_name(), "Environment build complete", UVM_LOW)
@@ -64,8 +64,6 @@ class adder_env extends uvm_env;
     `uvm_info(get_type_name(), "Environment connect complete", UVM_LOW)
   endfunction : connect_phase
 
-endclass : adder_env
+endclass : multiplier_env
 
 `endif
-
-

@@ -4,12 +4,10 @@
 // ============================================================================
 
 // 设计文件
-../adder.v
+../multiplier.v
 
 // UVM 组件
 +incdir+./
-adder_if.sv
-adder_pkg.sv
+multiplier_if.sv
+multiplier_pkg.sv
 tb_top.sv
-
-

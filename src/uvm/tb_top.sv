@@ -9,7 +9,7 @@ module tb_top;
   // 导入 UVM 和测试 package
   import uvm_pkg::*;
   `include "uvm_macros.svh"
-  import adder_pkg::*;
+  import multiplier_pkg::*;
   
   // ========================================================================
   // 时钟和复位
@@ -33,12 +33,12 @@ module tb_top;
   // ========================================================================
   // 接口实例化
   // ========================================================================
-  adder_if aif(clk);
+  multiplier_if aif(clk);
   
   // ========================================================================
-  // DUT 实例化
+  // DUT 实例化 (16-bit multiplier)
   // ========================================================================
-  adder dut (
+  multiplier dut (
     .clk  (clk),
     .in1  (aif.in1),
     .in2  (aif.in2),
@@ -51,14 +51,14 @@ module tb_top;
   initial begin
     // 支持 VCS/Verdi 波形
     `ifdef VCS
-      $fsdbDumpfile("adder_uvm.fsdb");
+      $fsdbDumpfile("multiplier_uvm.fsdb");
       $fsdbDumpvars(0, tb_top);
       $fsdbDumpMDA();
     `endif
     
     // 支持其他仿真器
     `ifdef DUMP_VCD
-      $dumpfile("adder_uvm.vcd");
+      $dumpfile("multiplier_uvm.vcd");
       $dumpvars(0, tb_top);
     `endif
   end
@@ -68,7 +68,7 @@ module tb_top;
   // ========================================================================
   initial begin
     // 将接口传递给 UVM config_db
-    uvm_config_db#(virtual adder_if)::set(null, "*", "vif", aif);
+    uvm_config_db#(virtual multiplier_if)::set(null, "*", "vif", aif);
     
     // 设置超时时间
     uvm_top.set_timeout(10ms, 0);
@@ -86,5 +86,3 @@ module tb_top;
   end
 
 endmodule : tb_top
-
-

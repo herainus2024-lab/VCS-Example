@@ -1,24 +1,24 @@
-`ifndef ADDER_AGENT_SV
-`define ADDER_AGENT_SV
+`ifndef MULTIPLIER_AGENT_SV
+`define MULTIPLIER_AGENT_SV
 
 // ============================================================================
-// Adder Agent
+// Multiplier Agent
 // 封装 driver, monitor, sequencer，提供统一的验证接口
 // ============================================================================
-class adder_agent extends uvm_agent;
+class multiplier_agent extends uvm_agent;
   
-  `uvm_component_utils(adder_agent)
+  `uvm_component_utils(multiplier_agent)
   
   // 组件实例
-  adder_driver    drv;
-  adder_monitor   mon;
-  adder_sequencer sqr;
+  multiplier_driver    drv;
+  multiplier_monitor   mon;
+  multiplier_sequencer sqr;
   
   // Agent 模式配置
   uvm_active_passive_enum is_active = UVM_ACTIVE;
   
   // 构造函数
-  function new(string name = "adder_agent", uvm_component parent = null);
+  function new(string name = "multiplier_agent", uvm_component parent = null);
     super.new(name, parent);
   endfunction : new
   
@@ -30,12 +30,12 @@ class adder_agent extends uvm_agent;
     uvm_config_db#(uvm_active_passive_enum)::get(this, "", "is_active", is_active);
     
     // 始终创建 monitor
-    mon = adder_monitor::type_id::create("mon", this);
+    mon = multiplier_monitor::type_id::create("mon", this);
     
     // 只在 active 模式下创建 driver 和 sequencer
     if (is_active == UVM_ACTIVE) begin
-      drv = adder_driver::type_id::create("drv", this);
-      sqr = adder_sequencer::type_id::create("sqr", this);
+      drv = multiplier_driver::type_id::create("drv", this);
+      sqr = multiplier_sequencer::type_id::create("sqr", this);
     end
     
     `uvm_info(get_type_name(), $sformatf("Agent created in %s mode", 
@@ -52,8 +52,6 @@ class adder_agent extends uvm_agent;
     end
   endfunction : connect_phase
 
-endclass : adder_agent
+endclass : multiplier_agent
 
 `endif
-
-

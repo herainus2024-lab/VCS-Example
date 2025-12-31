@@ -7,7 +7,7 @@
 # ============================================================================
 
 echo "============================================"
-echo "  Compiling UVM Testbench for Adder"
+echo "  Compiling UVM Testbench for Multiplier"
 echo "  (VCS 2018 + New GCC Compatible)"
 echo "============================================"
 
@@ -59,9 +59,9 @@ vcs -full64 \
     -lca \
     -l sim/compile.log \
     ${UVM_HOME}/src/uvm_pkg.sv \
-    src/adder.v \
-    src/uvm/adder_if.sv \
-    src/uvm/adder_pkg.sv \
+    src/multiplier.v \
+    src/uvm/multiplier_if.sv \
+    src/uvm/multiplier_pkg.sv \
     src/uvm/tb_top.sv \
     -o sim/simv_uvm
 

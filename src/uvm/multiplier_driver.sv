@@ -1,19 +1,19 @@
-`ifndef ADDER_DRIVER_SV
-`define ADDER_DRIVER_SV
+`ifndef MULTIPLIER_DRIVER_SV
+`define MULTIPLIER_DRIVER_SV
 
 // ============================================================================
-// Adder Driver
+// Multiplier Driver
 // 从 sequencer 获取事务，驱动到 DUT 接口
 // ============================================================================
-class adder_driver extends uvm_driver #(adder_transaction);
+class multiplier_driver extends uvm_driver #(multiplier_transaction);
   
-  `uvm_component_utils(adder_driver)
+  `uvm_component_utils(multiplier_driver)
   
   // 虚拟接口句柄
-  virtual adder_if.driver_mp vif;
+  virtual multiplier_if.driver_mp vif;
   
   // 构造函数
-  function new(string name = "adder_driver", uvm_component parent = null);
+  function new(string name = "multiplier_driver", uvm_component parent = null);
     super.new(name, parent);
   endfunction : new
   
@@ -21,14 +21,14 @@ class adder_driver extends uvm_driver #(adder_transaction);
   virtual function void build_phase(uvm_phase phase);
     super.build_phase(phase);
     
-    if (!uvm_config_db#(virtual adder_if.driver_mp)::get(this, "", "vif", vif)) begin
+    if (!uvm_config_db#(virtual multiplier_if.driver_mp)::get(this, "", "vif", vif)) begin
       `uvm_fatal(get_type_name(), "Virtual interface not found in config_db!")
     end
   endfunction : build_phase
   
   // Run Phase - 主要驱动逻辑
   virtual task run_phase(uvm_phase phase);
-    adder_transaction tr;
+    multiplier_transaction tr;
     
     // 初始化接口
     reset_interface();
@@ -48,21 +48,19 @@ class adder_driver extends uvm_driver #(adder_transaction);
   // 复位接口信号
   virtual task reset_interface();
     @(vif.driver_cb);
-    vif.driver_cb.in1 <= 32'h0;
-    vif.driver_cb.in2 <= 32'h0;
+    vif.driver_cb.in1 <= 16'h0;
+    vif.driver_cb.in2 <= 16'h0;
   endtask : reset_interface
   
   // 驱动单个事务
-  virtual task drive_transaction(adder_transaction tr);
+  virtual task drive_transaction(multiplier_transaction tr);
     @(vif.driver_cb);
     vif.driver_cb.in1 <= tr.in1;
     vif.driver_cb.in2 <= tr.in2;
     
-    `uvm_info(get_type_name(), $sformatf("Driving: in1=0x%08h, in2=0x%08h", tr.in1, tr.in2), UVM_HIGH)
+    `uvm_info(get_type_name(), $sformatf("Driving: in1=0x%04h, in2=0x%04h", tr.in1, tr.in2), UVM_HIGH)
   endtask : drive_transaction
 
-endclass : adder_driver
+endclass : multiplier_driver
 
 `endif
-
-

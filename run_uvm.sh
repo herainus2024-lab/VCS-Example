@@ -6,7 +6,7 @@
 # ============================================================================
 
 # 默认测试名称
-TEST_NAME=${1:-adder_random_test}
+TEST_NAME=${1:-multiplier_random_test}
 
 echo "============================================"
 echo "  Running UVM Test: $TEST_NAME"
@@ -34,11 +34,9 @@ cd ..
 
 # ============================================================================
 # 使用示例：
-# ./run_uvm.sh                       # 运行默认随机测试
-# ./run_uvm.sh adder_random_test     # 运行随机测试
-# ./run_uvm.sh adder_directed_test   # 运行定向测试
-# ./run_uvm.sh adder_corner_test     # 运行边界测试
-# ./run_uvm.sh adder_full_test       # 运行完整测试
+# ./run_uvm.sh                           # 运行默认随机测试
+# ./run_uvm.sh multiplier_random_test     # 运行随机测试
+# ./run_uvm.sh multiplier_directed_test   # 运行定向测试
+# ./run_uvm.sh multiplier_corner_test     # 运行边界测试
+# ./run_uvm.sh multiplier_full_test       # 运行完整测试
 # ============================================================================
-
-

@@ -1,17 +1,17 @@
-`ifndef ADDER_IF_SV
-`define ADDER_IF_SV
+`ifndef MULTIPLIER_IF_SV
+`define MULTIPLIER_IF_SV
 
 // ============================================================================
-// Adder Interface
+// Multiplier Interface
 // 定义 DUT 的接口信号，用于连接 UVM 组件和 DUT
 // ============================================================================
-interface adder_if(input logic clk);
+interface multiplier_if(input logic clk);
   
-  // 输入信号
-  logic [31:0] in1;
-  logic [31:0] in2;
+  // 输入信号 (16-bit for 16-bit multiplier)
+  logic [15:0] in1;
+  logic [15:0] in2;
   
-  // 输出信号
+  // 输出信号 (32-bit product)
   logic [31:0] out;
   
   // Driver Clocking Block - 用于驱动输入
@@ -36,8 +36,6 @@ interface adder_if(input logic clk);
   // Monitor Modport  
   modport monitor_mp (clocking monitor_cb, input clk);
 
-endinterface : adder_if
+endinterface : multiplier_if
 
 `endif
-
-
