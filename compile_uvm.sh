@@ -2,13 +2,13 @@
 
 # ============================================================================
 # UVM 编译脚本
-# 用于编译 UVM 验证环境
+# 用于编译 UVM 验证环境（兼容 VCS 2018）
 # ============================================================================
 
 # 编译选项说明：
 # -full64         : 使用 64 位 VCS
 # -sverilog       : 支持 SystemVerilog 语法
-# -ntb_opts uvm   : 启用 UVM 支持（VCS 内置 UVM 库）
+# -ntb_opts uvm   : 启用 UVM 支持（不指定版本，使用默认）
 # -timescale      : 时间精度
 # -fsdb           : 支持 FSDB 波形输出
 # -kdb            : 生成 Verdi 数据库
@@ -20,15 +20,19 @@ echo "============================================"
 echo "  Compiling UVM Testbench for Adder"
 echo "============================================"
 
+# 创建 sim 目录（如果不存在）
+mkdir -p sim
+
 vcs -full64 \
     -sverilog \
-    -ntb_opts uvm-1.2 \
+    -ntb_opts uvm \
     -timescale=1ns/1ps \
     -fsdb \
     -kdb \
     +incdir+src/uvm \
     +define+VCS \
     -debug_access+all \
+    -CFLAGS "-DVCS" \
     -l sim/compile.log \
     src/adder.v \
     src/uvm/adder_if.sv \
@@ -48,5 +52,3 @@ else
     echo "============================================"
     exit 1
 fi
-
-
