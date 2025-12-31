@@ -2,38 +2,63 @@
 
 # ============================================================================
 # UVM 编译脚本
-# 用于编译 UVM 验证环境（兼容 VCS 2018）
+# 适用于 VCS 2018 + 新版 GCC 的兼容方案
+# 通过禁用 DPI 避免 UVM C 代码编译问题
 # ============================================================================
-
-# 编译选项说明：
-# -full64         : 使用 64 位 VCS
-# -sverilog       : 支持 SystemVerilog 语法
-# -ntb_opts uvm   : 启用 UVM 支持（不指定版本，使用默认）
-# -timescale      : 时间精度
-# -fsdb           : 支持 FSDB 波形输出
-# -kdb            : 生成 Verdi 数据库
-# +incdir+        : include 文件搜索路径
-# -o              : 输出可执行文件路径
-# +define+VCS     : 定义 VCS 宏
 
 echo "============================================"
 echo "  Compiling UVM Testbench for Adder"
+echo "  (VCS 2018 + New GCC Compatible)"
 echo "============================================"
 
 # 创建 sim 目录（如果不存在）
 mkdir -p sim
 
+# 清理旧的编译产物（避免缓存问题）
+echo "Cleaning previous build artifacts..."
+rm -rf sim/simv_uvm sim/simv_uvm.daidir sim/csrc sim/AN.DB
+rm -f sim/compile.log sim/ucli.key
+
+# 自动检测 VCS 安装路径中的 UVM 库
+VCS_HOME=${VCS_HOME:-/home/binwang/software/vcs2018/vcs/O-2018.09-SP2}
+UVM_HOME=${VCS_HOME}/etc/uvm
+
+echo "VCS_HOME: $VCS_HOME"
+echo "UVM_HOME: $UVM_HOME"
+
+# 检查 UVM 路径是否存在
+if [ ! -d "$UVM_HOME" ]; then
+    echo "ERROR: UVM_HOME not found at $UVM_HOME"
+    exit 1
+fi
+
+# 编译选项：
+# +define+UVM_NO_DPI          : 禁用 UVM DPI（避免 C 代码编译问题）
+# +define+UVM_HDL_NO_DPI      : 禁用 HDL DPI
+# +define+UVM_REGEX_NO_DPI    : 禁用正则表达式 DPI
+# +define+UVM_CMDLINE_NO_DPI  : 禁用命令行 DPI
+# +define+UVM_NO_DEPRECATED   : 禁用弃用的功能
+# 注意：不使用 -ntb_opts uvm，直接编译 uvm_pkg.sv
+
+echo "Starting VCS compilation..."
+
 vcs -full64 \
     -sverilog \
-    -ntb_opts uvm \
     -timescale=1ns/1ps \
     -fsdb \
     -kdb \
+    +incdir+${UVM_HOME}/src \
     +incdir+src/uvm \
     +define+VCS \
+    +define+UVM_NO_DPI \
+    +define+UVM_HDL_NO_DPI \
+    +define+UVM_REGEX_NO_DPI \
+    +define+UVM_CMDLINE_NO_DPI \
+    +define+UVM_NO_DEPRECATED \
     -debug_access+all \
-    -CFLAGS "-DVCS" \
+    -lca \
     -l sim/compile.log \
+    ${UVM_HOME}/src/uvm_pkg.sv \
     src/adder.v \
     src/uvm/adder_if.sv \
     src/uvm/adder_pkg.sv \
