@@ -30,6 +30,7 @@ module tb;
 
     #20;
     // Exit the simulation
+    
     $finish;
   end
 
